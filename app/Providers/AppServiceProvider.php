@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Services\V1\Users\UsersService;
 use Illuminate\Support\ServiceProvider;
+use App\Services\V1\Users\IUsersService;
 use App\Services\V1\Orders\OrdersService;
 use App\Services\V1\Orders\IOrdersService;
+use App\Repositories\V1\Users\UsersRepository;
+use App\Repositories\V1\Users\IUsersRepository;
 use App\Repositories\V1\Orders\OrdersRepository;
 use App\Repositories\V1\Orders\IOrdersRepository;
 
@@ -34,10 +38,12 @@ class AppServiceProvider extends ServiceProvider
     protected function bindServices()
     {
         $this->app->bind(IOrdersService::class, OrdersService::class);
+        $this->app->bind(IUsersService::class, UsersService::class);
     }
 
     protected function bindRepositories()
     {
         $this->app->bind(IOrdersRepository::class, OrdersRepository::class);
+        $this->app->bind(IUsersRepository::class, UsersRepository::class);
     }
 }
