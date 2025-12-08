@@ -50,4 +50,14 @@ class UserController extends Controller
         }
         return $this->successResponse(new UserResource($user));
     }
+    public function logout()
+    {
+        $logout = $this->usersService->logout();
+
+        if ($logout === ErrorTypeEnum::FAILED_TO_LOGOUT) {
+            return $this->errorResponse('Could not logout user', [], 500);
+        }
+
+        return $this->successResponse([], 'Successfully logged out');
+    }
 }

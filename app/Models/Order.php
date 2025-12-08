@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['user_id', 'title', 'status', 'total_price'];
+    protected $fillable = ['user_id', 'name', 'email', 'phone', 'address', 'status', 'total_price'];
 
     public function items()
     {
@@ -18,5 +18,10 @@ class Order extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

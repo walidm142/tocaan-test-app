@@ -51,4 +51,15 @@ class UsersService extends BaseService implements IUsersService
     {
         return auth('api')->user();
     }
+
+    public function logout()
+    {
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+        } catch (JWTException $e) {
+            return ErrorTypeEnum::FAILED_TO_LOGOUT;
+        }
+
+        return true;
+    }
 }

@@ -9,4 +9,5 @@ interface IUsersService extends IBaseService
     public function login(array $credentials);
     public function register(array $data);
     public function me();
+    public function logout();
 }

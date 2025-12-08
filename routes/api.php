@@ -16,6 +16,8 @@ Route::prefix('/v1')->group(function () {
     Route::middleware('jwt')->group(function () {
         // me endpoint
         Route::get('me', [UserController::class, 'me']);
+        // logout endpoint
+        Route::post('logout', [UserController::class, 'logout']);
 
         Route::apiResource('/orders', OrderController::class);
         Route::apiResource('/payments', PaymentController::class);
