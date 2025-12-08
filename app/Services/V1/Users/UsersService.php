@@ -2,7 +2,7 @@
 
 namespace App\Services\V1\Users;
 
-use App\V1\ErrorTypeEnum;
+use App\Enums\V1\ErrorTypeEnum;
 use App\Services\V1\BaseService;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Resources\V1\UserResource;
@@ -39,7 +39,7 @@ class UsersService extends BaseService implements IUsersService
     {
         $user = $this->repository->create($data);
         try {
-            $token = JWTAuth::fromUser($user);
+            JWTAuth::fromUser($user);
         } catch (JWTException $e) {
             return null;
         }

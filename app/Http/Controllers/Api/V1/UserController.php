@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\V1\ErrorTypeEnum;
-use Illuminate\Http\Request;
+use App\Enums\V1\ErrorTypeEnum;
 use App\Traits\V1\ApiResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\UserResource;
-use App\Services\V1\Users\IUserService;
 use App\Services\V1\Users\IUsersService;
 use App\Http\Requests\V1\Users\LoginRequest;
 use App\Http\Requests\V1\Users\RegisterRequest;

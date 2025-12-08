@@ -1,6 +1,6 @@
 <?php
 
-namespace App\V1;
+namespace App\Enums\V1;
 
 enum ErrorTypeEnum : string
 {
