@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Services\V1;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Repositories\V1\IBaseRepository;
+
+class BaseService implements IBaseService
+{
+    protected $repository;
+
+    public function __construct(IBaseRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    public function all()
+    {
+        return $this->repository->all();
+    }
+
+    public function find($id)
+    {
+        return $this->repository->find($id);
+    }
+
+    public function create(array $data)
+    {
+        return $this->repository->create($data);
+    }
+
+    public function update($id, array $data)
+    {
+        $record = $this->repository->find($id);
+        return $this->repository->update($id, $data);
+
+    }
+
+    public function delete($id)
+    {
+        $record = $this->repository->find($id);
+        
+        return $this->repository->delete($id);
+    }
+}
