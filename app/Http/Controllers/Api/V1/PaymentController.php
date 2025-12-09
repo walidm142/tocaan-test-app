@@ -22,7 +22,7 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = $this->paymentsService->all();
-        return $this->successResponse(PaymentsResource::collection($payments), 'Payments retrieved successfully');
+        return $this->successResponse(PaymentsResource::collection($payments['data']), 'Payments retrieved successfully', 200, $payments['meta']);
     }
 
     /**
@@ -47,7 +47,7 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         $payment = $this->paymentsService->find($payment->id);
-        return $this->successResponse(new PaymentsResource($payment['data']), 'Payment retrieved successfully', 200, $payment['meta']);
+        return $this->successResponse(new PaymentsResource($payment), 'Payment retrieved successfully', 200);
     }
 
     /**

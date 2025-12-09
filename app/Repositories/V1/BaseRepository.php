@@ -4,6 +4,7 @@ namespace App\Repositories\V1;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\V1\IBaseRepository;
+use Illuminate\Pipeline\Pipeline;
 
 class BaseRepository implements IBaseRepository
 {
@@ -16,7 +17,12 @@ class BaseRepository implements IBaseRepository
 
     public function all($perPage = 10)
     {
-        $paginated = $this->model->paginate($perPage);
+        $paginated = app(Pipeline::class)
+            ->send($this->model->query())
+            ->through($this->model->getPipelineStages())
+            ->thenReturn()
+            ->paginate($perPage);
+
         return [
             'data' => $paginated->items(),
             'meta' => [
