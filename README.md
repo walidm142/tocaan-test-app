@@ -1,18 +1,22 @@
 # Tocaan API Documentation
 
 ## Overview
+
 Tocaan is a RESTful API for managing users, orders, payments, and authentication. It supports JWT-based authentication and multiple payment gateways (Credit Card, Stripe, PayPal).
 
 ## Authentication
+
 All endpoints (except login and register) require JWT authentication. Include the token in the `Authorization: Bearer <token>` header.
 
 ### Endpoints
-- `POST /api/v1/login` — Login and receive a JWT token.
-- `POST /api/v1/register` — Register a new user.
-- `GET /api/v1/me` — Get current user info (auth required).
-- `POST /api/v1/logout` — Logout the current user (auth required).
+
+-   `POST /api/v1/login` — Login and receive a JWT token.
+-   `POST /api/v1/register` — Register a new user.
+-   `GET /api/v1/me` — Get current user info (auth required).
+-   `POST /api/v1/logout` — Logout the current user (auth required).
 
 #### Login Response Example
+
 ```
 {
   "success": true,
@@ -26,14 +30,16 @@ All endpoints (except login and register) require JWT authentication. Include th
 ```
 
 ## Orders
-- `GET /api/v1/orders` — List orders (paginated, auth required)
-- `POST /api/v1/orders` — Create order
-- `GET /api/v1/orders/{id}` — Get order details
-- `PUT /api/v1/orders/{id}` — Update order
-- `DELETE /api/v1/orders/{id}` — Delete order
-- `POST /api/v1/orders/{order}/payment` — Generate payment URL for an order
+
+-   `GET /api/v1/orders` — List orders (paginated, auth required)
+-   `POST /api/v1/orders` — Create order
+-   `GET /api/v1/orders/{id}` — Get order details
+-   `PUT /api/v1/orders/{id}` — Update order
+-   `DELETE /api/v1/orders/{id}` — Delete order
+-   `POST /api/v1/orders/{order}/payment` — Generate payment URL for an order
 
 #### Order Response Example
+
 ```
 {
   "id": 1,
@@ -63,6 +69,7 @@ All endpoints (except login and register) require JWT authentication. Include th
 ```
 
 #### Paginated Response Example
+
 ```
 {
   "success": true,
@@ -78,10 +85,12 @@ All endpoints (except login and register) require JWT authentication. Include th
 ```
 
 ## Payments
-- `GET /api/v1/payments` — List payments (paginated, auth required)
-- `GET /api/v1/payments/{id}` — Get payment details
+
+-   `GET /api/v1/payments` — List payments (paginated, auth required)
+-   `GET /api/v1/payments/{id}` — Get payment details
 
 #### Payment Response Example
+
 ```
 {
   "id": 1,
@@ -95,11 +104,13 @@ All endpoints (except login and register) require JWT authentication. Include th
 ```
 
 ## Payment Gateway
-- Supported gateways: Credit Card, Stripe, PayPal
-- Gateway selection is controlled by the `PAYMENT_GATEWAY` environment variable or by passing `payment_method` in the payment request.
-- Stripe and PayPal credentials are loaded from `.env` (`STRIPE_KEY`, `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`).
+
+-   Supported gateways: Credit Card, Stripe, PayPal
+-   Gateway selection is controlled by the `PAYMENT_GATEWAY` environment variable or by passing `payment_method` in the payment request.
+-   Stripe and PayPal credentials are loaded from `.env` (`STRIPE_KEY`, `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`).
 
 ## Error Response Example
+
 ```
 {
   "success": false,
@@ -109,46 +120,46 @@ All endpoints (except login and register) require JWT authentication. Include th
 ```
 
 ## Environment Variables
-- `JWT_TTL`: JWT expiration in minutes (default: 1440 for 1 day)
-- `PAYMENT_GATEWAY`: Default payment gateway
-- `STRIPE_KEY`: Stripe API key
-- `PAYPAL_CLIENT_ID`: PayPal client ID
-- `PAYPAL_SECRET`: PayPal secret
+
+-   `PAYMENT_GATEWAY`: Default payment gateway
+-   `STRIPE_KEY`: Stripe API key
+-   `PAYPAL_CLIENT_ID`: PayPal client ID
+-   `PAYPAL_SECRET`: PayPal secret
 
 ## Filtering
-- Orders can be filtered by status and other fields using query parameters.
 
-## Setup & Testing
-- Configure your `.env` file with database and payment gateway credentials.
-- Run migrations: `php artisan migrate`
-- Run tests: `php artisan test`
-
----
-For more details, see the source code or contact the API maintainer.
+-   Orders can be filtered by status and other fields using query parameters.
 
 ## JWT Setup
 
 Tocaan uses JWT (JSON Web Tokens) for authentication. To set up JWT:
 
 1. Install the JWT package (if not already):
-   ```bash
-   composer require tymon/jwt-auth
-   ```
+    ```bash
+    composer require tymon/jwt-auth
+    ```
 2. Publish the JWT config:
-   ```bash
-   php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
-   ```
+    ```bash
+    php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+    ```
 3. Generate a JWT secret key:
-   ```bash
-   php artisan jwt:secret
-   ```
-   This will add `JWT_SECRET` to your `.env` file.
-4. (Optional) Set token expiration in `.env`:
-   ```env
-   JWT_TTL=1440 # Token expires in 1 day (1440 minutes)
-   ```
-5. Configure other JWT settings in `config/jwt.php` as needed.
+    ```bash
+    php artisan jwt:secret
+    ```
+    This will add `JWT_SECRET` to your `.env` file.
+4. Configure other JWT settings in `config/jwt.php` as needed.
 
 **Note:**
-- All protected endpoints require the JWT token in the `Authorization: Bearer <token>` header.
-- You can change the expiration time by modifying `JWT_TTL` in `.env`.
+
+-   All protected endpoints require the JWT token in the `Authorization: Bearer <token>` header.
+-   You can change the expiration time by modifying `JWT_TTL` in `.env`.
+
+## Setup & Testing
+
+-   Configure your `.env` file with database and payment gateway credentials.
+-   Run migrations: `php artisan migrate`
+-   Run tests: `php artisan test`
+
+---
+
+For more details, see the source code or contact the API maintainer.
