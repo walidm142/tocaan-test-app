@@ -125,3 +125,30 @@ All endpoints (except login and register) require JWT authentication. Include th
 
 ---
 For more details, see the source code or contact the API maintainer.
+
+## JWT Setup
+
+Tocaan uses JWT (JSON Web Tokens) for authentication. To set up JWT:
+
+1. Install the JWT package (if not already):
+   ```bash
+   composer require tymon/jwt-auth
+   ```
+2. Publish the JWT config:
+   ```bash
+   php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+   ```
+3. Generate a JWT secret key:
+   ```bash
+   php artisan jwt:secret
+   ```
+   This will add `JWT_SECRET` to your `.env` file.
+4. (Optional) Set token expiration in `.env`:
+   ```env
+   JWT_TTL=1440 # Token expires in 1 day (1440 minutes)
+   ```
+5. Configure other JWT settings in `config/jwt.php` as needed.
+
+**Note:**
+- All protected endpoints require the JWT token in the `Authorization: Bearer <token>` header.
+- You can change the expiration time by modifying `JWT_TTL` in `.env`.
