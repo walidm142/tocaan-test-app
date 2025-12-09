@@ -8,5 +8,9 @@ interface IFiltrable
      * Apply filters to the query.
      */
     public function getPipelineStages();
+    /**
+     * Get allowed includes.
+     */
+    public function allowedIncludes();
 
 }

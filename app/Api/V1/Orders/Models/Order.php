@@ -36,4 +36,9 @@ class Order extends Model implements IFiltrable
             StatusFilter::class,
         ];
     }
+
+    public function allowedIncludes()
+    {
+        return ['items', 'payment', 'user'];
+    }
 }
