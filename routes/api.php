@@ -19,7 +19,11 @@ Route::prefix('/v1')->group(function () {
         // logout endpoint
         Route::post('logout', [UserController::class, 'logout']);
 
+        //orders endpoints
+        Route::post('orders/{order}/payment', [OrderController::class, 'makePayment']);
         Route::apiResource('/orders', OrderController::class);
-        Route::apiResource('/payments', PaymentController::class);
+
+        //payments endpoints
+        Route::apiResource('/payments', PaymentController::class)->only(['index', 'show']);
     });
 });

@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Order;
-use App\Traits\V1\ApiResponseTrait;
 use Illuminate\Http\Request;
+use App\Traits\V1\ApiResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\OrderResource;
 use App\Services\V1\Orders\IOrdersService;
 use App\Http\Requests\V1\Orders\CreateOrderRequest;
+use App\Http\Requests\V1\Orders\CreateOrderPaymentRequest;
 
 class OrderController extends Controller
 {
 
     use ApiResponseTrait;
-    
+
     public function __construct(protected IOrdersService $ordersService)
     {
     }
@@ -77,5 +78,17 @@ class OrderController extends Controller
     {
         $this->ordersService->delete($order);
         return $this->successResponse(null, 'Order deleted successfully');
+    }
+
+    /**
+     * Make payment for the specified order.
+     */
+    public function makePayment(CreateOrderPaymentRequest $request, Order $order)
+    {
+        $payment = $this->ordersService->makePayment($order, $request->all());
+        return $this->successResponse([
+            'payment_url' => $payment,
+
+        ], 'Payment URL generated successfully');
     }
 }
