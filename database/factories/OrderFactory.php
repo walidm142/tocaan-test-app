@@ -2,12 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Api\V1\Orders\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Order;
 
-/**
- * @extends Factory<Order>
- */
 class OrderFactory extends Factory
 {
     protected $model = Order::class;

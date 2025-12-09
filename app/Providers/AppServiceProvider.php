@@ -2,20 +2,22 @@
 
 namespace App\Providers;
 
-use App\Services\V1\Users\UsersService;
+
 use Illuminate\Support\ServiceProvider;
-use App\Services\V1\Users\IUsersService;
-use App\Services\V1\Orders\OrdersService;
-use App\Services\V1\Orders\IOrdersService;
-use App\Services\V1\Payments\PaymentsService;
-use App\Repositories\V1\Users\UsersRepository;
-use App\Services\V1\Payments\IPaymentsService;
-use App\Repositories\V1\Users\IUsersRepository;
-use App\Repositories\V1\Orders\OrdersRepository;
-use App\Repositories\V1\Orders\IOrdersRepository;
-use App\Services\V1\Payments\PaymentGatewayFactory;
-use App\Repositories\V1\Payments\PaymentsRepository;
-use App\Repositories\V1\Payments\IPaymentsRepository;
+use App\Api\V1\Users\Services\UsersService;
+use App\Api\V1\Users\Services\IUsersService;
+use App\Api\V1\Orders\Services\OrdersService;
+use App\Api\V1\Orders\Services\IOrdersService;
+use App\Api\V1\Payments\Services\PaymentsService;
+use App\Api\V1\Payments\Services\IPaymentsService;
+use App\Api\V1\Users\Repositories\UsersRepository;
+use App\Api\V1\Base\Payments\PaymentGatewayFactory;
+use App\Api\V1\Users\Repositories\IUsersRepository;
+use App\Api\V1\Orders\Repositories\OrdersRepository;
+use App\Api\V1\Orders\Repositories\IOrdersRepository;
+use App\Api\V1\Payments\Repositories\PaymentsRepository;
+use App\Api\V1\Payments\Repositories\IPaymentsRepository;
+
 
 
 class AppServiceProvider extends ServiceProvider

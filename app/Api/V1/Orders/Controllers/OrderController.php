@@ -1,0 +1,96 @@
+<?php
+
+namespace App\Api\V1\Orders\Controllers;
+
+use Illuminate\Http\Request;
+use App\Api\V1\Orders\Models\Order;
+use App\Http\Controllers\Controller;
+use App\Api\V1\Base\Traits\ApiResponseTrait;
+use App\Api\V1\Orders\Resources\OrderResource;
+use App\Api\V1\Orders\Services\IOrdersService;
+use App\Api\V1\Orders\Requests\CreateOrderRequest;
+use App\Api\V1\Orders\Requests\CreateOrderPaymentRequest;
+
+
+
+class OrderController extends Controller
+{
+
+    use ApiResponseTrait;
+
+    public function __construct(protected IOrdersService $ordersService)
+    {
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $orders = $this->ordersService->all();
+        return $this->successResponse(OrderResource::collection($orders['data']), 'Orders retrieved successfully', 200, $orders['meta']);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(CreateOrderRequest $request)
+    {
+        $order = $this->ordersService->create($request->all());
+        return $this->successResponse(new OrderResource($order->refresh()));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Order $order)
+    {
+        return $this->successResponse(new OrderResource($order));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Order $order)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Order $order)
+    {
+        $this->ordersService->update($order, $request->all());
+        return $this->successResponse(new OrderResource($order->refresh()));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Order $order)
+    {
+        $this->ordersService->delete($order);
+        return $this->successResponse(null, 'Order deleted successfully');
+    }
+
+    /**
+     * Make payment for the specified order.
+     */
+    public function makePayment(CreateOrderPaymentRequest $request, Order $order)
+    {
+        $payment = $this->ordersService->makePayment($order, $request->all());
+        return $this->successResponse([
+            'payment_url' => $payment,
+
+        ], 'Payment URL generated successfully');
+    }
+}

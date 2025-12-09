@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\UserController;
-use App\Http\Controllers\Api\V1\OrderController;
-use App\Http\Controllers\Api\V1\PaymentController;
+
+use App\Api\V1\Users\Controllers\UserController;
+use App\Api\V1\Orders\Controllers\OrderController;
+use App\Api\V1\Payments\Controllers\PaymentController;
+
 
 
 
