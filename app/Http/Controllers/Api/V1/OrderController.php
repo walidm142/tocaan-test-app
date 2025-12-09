@@ -26,7 +26,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = $this->ordersService->all();
-        return $this->successResponse(OrderResource::collection($orders));
+        return $this->successResponse(OrderResource::collection($orders['data']), 'Orders retrieved successfully', 200, $orders['meta']);
     }
 
     /**

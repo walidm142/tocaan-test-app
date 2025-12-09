@@ -14,9 +14,18 @@ class BaseRepository implements IBaseRepository
         $this->model = $model;
     }
 
-    public function all()
+    public function all($perPage = 10)
     {
-        return $this->model->all();
+        $paginated = $this->model->paginate($perPage);
+        return [
+            'data' => $paginated->items(),
+            'meta' => [
+                'current_page' => $paginated->currentPage(),
+                'last_page' => $paginated->lastPage(),
+                'per_page' => $paginated->perPage(),
+                'total' => $paginated->total(),
+            ],
+        ];
     }
 
     public function find($id)

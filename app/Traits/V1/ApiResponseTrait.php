@@ -14,13 +14,17 @@ trait ApiResponseTrait
      * @param int $statusCode The HTTP status code.
      * @return JsonResponse
      */
-    protected function successResponse($data = [], string $message = 'Success', int $statusCode = 200): JsonResponse
+    protected function successResponse($data = [], string $message = 'Success', int $statusCode = 200, $meta = null): JsonResponse
     {
-        return response()->json([
+        $response = [
             'success' => true,
             'message' => $message,
             'data' => $data,
-        ], $statusCode);
+        ];
+        if ($meta !== null) {
+            $response['meta'] = $meta;
+        }
+        return response()->json($response, $statusCode);
     }
 
     /**

@@ -38,7 +38,7 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        
+
     }
 
     /**
@@ -47,7 +47,7 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         $payment = $this->paymentsService->find($payment->id);
-        return $this->successResponse(new PaymentsResource($payment), 'Payment retrieved successfully');
+        return $this->successResponse(new PaymentsResource($payment['data']), 'Payment retrieved successfully', 200, $payment['meta']);
     }
 
     /**
