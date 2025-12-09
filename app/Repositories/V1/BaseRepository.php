@@ -17,8 +17,25 @@ class BaseRepository implements IBaseRepository
 
     public function all($perPage = 10)
     {
+        $query = $this->model->query();
+
+        if (request()->has('includes')) {
+            $includes = explode(',', request()->input('includes'));
+
+            $allowedIncludes = $this->model->allowedIncludes();
+
+            $with = array_intersect($includes, $allowedIncludes);
+
+
+            if (count($with) != count($includes)) {
+                throw new \Exception('Invalid includes the allowed includes are: ' . implode(',', $allowedIncludes));
+            }
+
+            $query->with($with);
+        }
+
         $paginated = app(Pipeline::class)
-            ->send($this->model->query())
+            ->send($query)
             ->through($this->model->getPipelineStages())
             ->thenReturn()
             ->paginate($perPage);

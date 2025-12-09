@@ -9,4 +9,7 @@ interface IFiltrable
      */
     public function getPipelineStages();
 
+
+    public function allowedIncludes();
+
 }

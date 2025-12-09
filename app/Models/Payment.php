@@ -20,8 +20,15 @@ class Payment extends Model implements IFiltrable
     public function getPipelineStages()
     {
         return [
-           StatusFilter::class,
-           ByOrderFilter::class,
+            StatusFilter::class,
+            ByOrderFilter::class,
+        ];
+    }
+
+    public function allowedIncludes()
+    {
+        return [
+            'order',
         ];
     }
 }

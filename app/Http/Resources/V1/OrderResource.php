@@ -4,6 +4,7 @@ namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\V1\UserResource;
+use App\Http\Resources\V1\PaymentsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -24,6 +25,7 @@ class OrderResource extends JsonResource
             'total_price' => $this->total_price,
             'status' => $this->status,
             'items' => ItemsResource::collection($this->whenLoaded('items')),
+            'payment' => new PaymentsResource($this->whenLoaded('payment')),
             'created_by' => new UserResource($this->whenLoaded('user')),
         ];
     }
