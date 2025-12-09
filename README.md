@@ -1,59 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Tocaan API Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
+Tocaan is a RESTful API for managing users, orders, payments, and authentication. It supports JWT-based authentication and multiple payment gateways (Credit Card, Stripe, PayPal).
 
-## About Laravel
+## Authentication
+All endpoints (except login and register) require JWT authentication. Include the token in the `Authorization: Bearer <token>` header.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Endpoints
+- `POST /api/v1/login` — Login and receive a JWT token.
+- `POST /api/v1/register` — Register a new user.
+- `GET /api/v1/me` — Get current user info (auth required).
+- `POST /api/v1/logout` — Logout the current user (auth required).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Login Response Example
+```
+{
+  "success": true,
+  "message": "Success",
+  "data": {
+    "access_token": "...",
+    "token_type": "bearer",
+    "expires_in": 1440
+  }
+}
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Orders
+- `GET /api/v1/orders` — List orders (paginated, auth required)
+- `POST /api/v1/orders` — Create order
+- `GET /api/v1/orders/{id}` — Get order details
+- `PUT /api/v1/orders/{id}` — Update order
+- `DELETE /api/v1/orders/{id}` — Delete order
+- `POST /api/v1/orders/{order}/payment` — Generate payment URL for an order
 
-## Learning Laravel
+#### Order Response Example
+```
+{
+  "id": 1,
+  "customer_name": "John Doe",
+  "customer_email": "john@example.com",
+  "customer_phone": "1234567890",
+  "customer_address": "123 Main St",
+  "total_price": 100.00,
+  "status": "pending",
+  "items": [
+    {
+      "id": 1,
+      "product_name": "Product A",
+      "quantity": 2,
+      "price": 50.00,
+      "total_price": 100.00
+    }
+  ],
+  "created_by": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "created_at": "2024-06-10 12:00:00",
+    "updated_at": "2024-06-10 12:00:00"
+  }
+}
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+#### Paginated Response Example
+```
+{
+  "success": true,
+  "message": "Orders retrieved successfully",
+  "data": [ ...orders... ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 5,
+    "per_page": 10,
+    "total": 50
+  }
+}
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Payments
+- `GET /api/v1/payments` — List payments (paginated, auth required)
+- `GET /api/v1/payments/{id}` — Get payment details
 
-## Laravel Sponsors
+#### Payment Response Example
+```
+{
+  "id": 1,
+  "payment_method": "stripe",
+  "amount": 100.00,
+  "status": "pending",
+  "order": { ...order... },
+  "created_at": "2024-06-10 12:00:00",
+  "updated_at": "2024-06-10 12:00:00"
+}
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Payment Gateway
+- Supported gateways: Credit Card, Stripe, PayPal
+- Gateway selection is controlled by the `PAYMENT_GATEWAY` environment variable or by passing `payment_method` in the payment request.
+- Stripe and PayPal credentials are loaded from `.env` (`STRIPE_KEY`, `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`).
 
-### Premium Partners
+## Error Response Example
+```
+{
+  "success": false,
+  "message": "Invalid credentials",
+  "errors": []
+}
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Environment Variables
+- `JWT_TTL`: JWT expiration in minutes (default: 1440 for 1 day)
+- `PAYMENT_GATEWAY`: Default payment gateway
+- `STRIPE_KEY`: Stripe API key
+- `PAYPAL_CLIENT_ID`: PayPal client ID
+- `PAYPAL_SECRET`: PayPal secret
 
-## Contributing
+## Filtering
+- Orders can be filtered by status and other fields using query parameters.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Setup & Testing
+- Configure your `.env` file with database and payment gateway credentials.
+- Run migrations: `php artisan migrate`
+- Run tests: `php artisan test`
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+For more details, see the source code or contact the API maintainer.
