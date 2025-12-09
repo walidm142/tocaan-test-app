@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Resources\V1\OrderResource;
 use App\Models\Order;
+use App\Traits\V1\ApiResponseTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\OrderResource;
 use App\Services\V1\Orders\IOrdersService;
+use App\Http\Requests\V1\Orders\CreateOrderRequest;
 
 class OrderController extends Controller
 {
 
-
+    use ApiResponseTrait;
+    
     public function __construct(protected IOrdersService $ordersService)
     {
     }
@@ -22,7 +25,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = $this->ordersService->all();
-        return OrderResource::collection($orders);
+        return $this->successResponse(OrderResource::collection($orders));
     }
 
     /**
@@ -36,9 +39,10 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateOrderRequest $request)
     {
-        //
+        $order = $this->ordersService->create($request->all());
+        return $this->successResponse(new OrderResource($order->refresh()));
     }
 
     /**
@@ -46,7 +50,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return $order;
+        return $this->successResponse(new OrderResource($order));
     }
 
     /**
@@ -62,7 +66,8 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $this->ordersService->update($order, $request->all());
+        return $this->successResponse(new OrderResource($order->refresh()));
     }
 
     /**
@@ -70,6 +75,7 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        $this->ordersService->delete($order);
+        return $this->successResponse(null, 'Order deleted successfully');
     }
 }

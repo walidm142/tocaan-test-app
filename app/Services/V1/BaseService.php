@@ -29,17 +29,14 @@ class BaseService implements IBaseService
         return $this->repository->create($data);
     }
 
-    public function update($id, array $data)
+    public function update($record, array $data)
     {
-        $record = $this->repository->find($id);
-        return $this->repository->update($id, $data);
+        return $this->repository->update($record, $data);
 
     }
 
-    public function delete($id)
+    public function delete($record)
     {
-        $record = $this->repository->find($id);
-        
-        return $this->repository->delete($id);
+        return $this->repository->delete($record);
     }
 }

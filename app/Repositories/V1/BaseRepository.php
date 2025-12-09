@@ -27,18 +27,16 @@ class BaseRepository implements IBaseRepository
     {
         return $this->model->create($data);
     }
-    public function update($id, array $data)
+    public function update($record, array $data)
     {
-        $record = $this->model->find($id);
         if ($record) {
             $record->update($data);
             return $record->refresh();
         }
         return null;
     }
-    public function delete($id)
+    public function delete($record)
     {
-        $record = $this->model->find($id);
         if ($record) {
             $record->delete();
             return true;

@@ -23,7 +23,8 @@ class OrderResource extends JsonResource
             'customer_address' => $this->address,
             'total_price' => $this->total_price,
             'status' => $this->status,
-            'created_by' => new UserResource($this->user),
+            'items' => ItemsResource::collection($this->whenLoaded('items')),
+            'created_by' => new UserResource($this->whenLoaded('user')),
         ];
     }
 }
