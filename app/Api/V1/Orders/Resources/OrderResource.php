@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Api\V1\Users\Resources\UserResource;
 use App\Api\V1\Orders\Resources\ItemsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Api\V1\Payments\Resources\PaymentsResource;
 
 class OrderResource extends JsonResource
 {
@@ -25,7 +26,7 @@ class OrderResource extends JsonResource
             'total_price' => $this->total_price,
             'status' => $this->status,
             'items' => ItemsResource::collection($this->whenLoaded('items')),
-            'payment' => new PaymentResource($this->whenLoaded('payment')),
+            'payment' => new PaymentsResource($this->whenLoaded('payment')),
             'created_by' => new UserResource($this->whenLoaded('user')),
         ];
     }
