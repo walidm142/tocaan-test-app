@@ -38,8 +38,30 @@ class OrdersService extends BaseService implements IOrdersService
         return $order;
     }
 
+    public function delete($record)
+    {
+        // if order has payment throw exception
+        if ($record->payment()->exists()) {
+            throw new \Exception('Cannot delete order with a payment.');
+        }
+        // Delete related items first
+        $record->items()->delete();
+
+        // Then delete the order itself
+        return parent::delete($record);
+    }
+
     public function makePayment($order, array $data)
     {
+        if ($order->status !== 'confirmed') {
+            throw new \Exception('Payments can only be processed for orders in the confirmed status.');
+        }
+
+        //if order has payment throw exception
+        if ($order->payment()->exists()) {
+            throw new \Exception('Order already has a payment.');
+        }
+
         $payment = $order->payment()->create([
             'amount' => $order->total_price,
             'payment_method' => $data['payment_method'],
@@ -53,6 +75,9 @@ class OrdersService extends BaseService implements IOrdersService
             'payment_id' => $payment->id,
         ]);
 
+        // NOTE THIS Line
+        // must be in webhook but for simplicity we will update it here until webhook is implemented # walid Mahmoud
+        $payment->update(['status' => 'successful']);
         return $paymentUrl;
     }
 }
